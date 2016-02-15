@@ -25,9 +25,9 @@ download_obs_file <- function(station, obs_code){
     }
 }
 
-process_file <- function(station, years){
+process_file <- function(filename, years){
     temp_dir = "./temp"
-    unzip(paste0(obs_code, "_", station, ".zip"), exdir = temp_dir)
+    unzip(filename, exdir = temp_dir)
     
     # read csv
     df <- read.csv(dir(temp_dir, pattern = ".csv", full.names = TRUE))
@@ -40,6 +40,7 @@ process_file <- function(station, years){
 }
 
 # example
-lapply(stations$Site, download_obs_file, obs_code = 136)
-
+lapply(stations$Site, download_obs_file, obs_code = 122)
+df <- lapply(dir(pattern = "136_([0-9]{4,5}).zip"), process_file, years = c(2015))
+df <- do.call("rbind", df)
 # df <- process_file(stations$Site[4], years = c(2015))
